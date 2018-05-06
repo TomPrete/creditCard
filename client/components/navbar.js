@@ -1,30 +1,31 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {withRouter, Link} from 'react-router-dom'
 import {logout} from '../store'
 
-const Navbar = ({ handleClick, isLoggedIn }) => (
+const Navbar = ({ children, handleClick, isLoggedIn, user }) => (
+
   <div>
-    <h1>BOILERMAKER</h1>
+    <h1>Avant Credit</h1>
     <nav>
       {isLoggedIn ? (
         <div>
           {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
+          <Link to={`/user/${user}/home`}>Home</Link>
           <a href="#" onClick={handleClick}>
             Logout
           </a>
         </div>
-      ) : (
+      ) :
         <div>
           {/* The navbar will show these links before you log in */}
           <Link to="/login">Login</Link>
           <Link to="/signup">Sign Up</Link>
         </div>
-      )}
+      }
     </nav>
-    <hr />
+    {children}
   </div>
 )
 
@@ -33,7 +34,8 @@ const Navbar = ({ handleClick, isLoggedIn }) => (
  */
 const mapState = state => {
   return {
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    user: state.user.id
   }
 }
 
@@ -45,7 +47,7 @@ const mapDispatch = dispatch => {
   }
 }
 
-export default connect(mapState, mapDispatch)(Navbar)
+export default withRouter(connect(mapState, mapDispatch)(Navbar))
 
 /**
  * PROP TYPES
